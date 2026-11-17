@@ -1,26 +1,192 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-bone: #f2eee7;
+  --color-paper: #faf8f4;
+  --color-ink: #121212;
+  --color-graphite: #2b2a28;
+  --color-stone: #6b645d;
+  --color-mist: #a8a29a;
+  --color-sand: #b48a5a;
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bone);
+  color: var(--color-ink);
+}
+
+section[id] {
+  scroll-margin-top: 4.5rem;
+}
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-bone);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-sand);
+  outline-offset: 3px;
+}
+
+@layer components {
+  /* Títulos condensados (eixo wdth da Archivo variável). */
+  .font-display {
+    font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+    font-variation-settings: "wdth" 66;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 0.88;
+  }
+  .wordmark {
+    font-variation-settings: "wdth" 112;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 3rem;
+    padding: 0 1.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    transition:
+      background-color 0.3s,
+      color 0.3s,
+      border-color 0.3s,
+      transform 0.3s var(--ease-expo);
+  }
+  .btn svg {
+    transition: transform 0.4s var(--ease-expo);
+  }
+  .btn:hover svg {
+    transform: translateX(4px);
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn-light {
+    background: var(--color-bone);
+    color: var(--color-ink);
+  }
+  .btn-light:hover {
+    background: #fff;
+  }
+  .btn-dark {
+    background: var(--color-ink);
+    color: var(--color-bone);
+  }
+  .btn-dark:hover {
+    background: var(--color-graphite);
+  }
+  .btn-outline {
+    border: 1px solid currentColor;
+  }
+  .btn-outline:hover {
+    background: color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .link-line {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size 0.5s var(--ease-expo);
+  }
+  .link-line:hover,
+  .group:hover .link-line,
+  .link-line:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+/* ---------- Entrada da hero (CSS puro: roda antes da hidratação, sem custo de JS) ---------- */
+@keyframes rise {
+  from {
+    transform: translateY(105%);
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+@keyframes cue {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(200%);
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.hero-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+.hero-line > span {
+  display: block;
+  animation: rise 1.15s var(--ease-expo) both;
+  animation-delay: var(--d, 0s);
+}
+.hero-in {
+  animation: fade-up 1s var(--ease-expo) both;
+  animation-delay: var(--d, 0s);
+}
+/* Indicador de rolagem: só transform num elemento de 1px. */
+.scroll-cue {
+  animation: cue 2.4s var(--ease-expo) infinite;
+}
+.marquee {
+  animation: marquee 40s linear infinite;
+}
+.marquee-wrap:hover .marquee {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .marquee {
+    animation: none !important;
+  }
 }
