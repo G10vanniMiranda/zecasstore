@@ -48,7 +48,8 @@ export function Header({ nav, cta, menuCta }: Props) {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,color] duration-500 ${tone} ${
-        solid ? "border-ink/10 bg-bone/85 backdrop-blur-md" : "border-transparent"
+        // Menu aberto: barra sólida e instantânea, senão o conteúdo da página aparece atrás do logo e do X.
+        open ? "border-bone/10 bg-ink duration-0" : solid ? "border-ink/10 bg-bone/85 backdrop-blur-md" : "border-transparent"
       }`}
     >
       <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between px-4 sm:px-8 sm:h-16 lg:h-[4.5rem] lg:px-12">
