@@ -16,7 +16,11 @@ const instrument = Instrument_Serif({
 const title = `${brand.name} — Tênis VEJA, roupas e moda em ${brand.city}`;
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  // Domínio próprio via NEXT_PUBLIC_SITE_URL; senão, o domínio de produção que a Vercel injeta no build.
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ??
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000"),
+  ),
   title,
   description: brand.description,
   alternates: { canonical: "/" },
